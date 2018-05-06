@@ -388,17 +388,11 @@ public class AudioWebSocket extends WebSocketAdapter
             WebSocketFactory factory = api.getWebSocketFactory();
             synchronized (factory)
             {
-                // ensure SNI
-                String[] oldNames = factory.getServerNames();
-                String[] oldProxyNames = factory.getProxySettings().getServerNames();
                 factory.getProxySettings().setServerName(endpoint);
                 socket = factory
                         .setServerName(endpoint)
                         .createSocket(wssEndpoint)
                         .addListener(this);
-                // restore old SNI
-                factory.getProxySettings().setServerNames(oldProxyNames);
-                factory.setServerNames(oldNames);
             }
             changeStatus(ConnectionStatus.CONNECTING_AWAITING_WEBSOCKET_CONNECT);
             socket.connectAsynchronously();
